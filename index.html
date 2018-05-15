@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style type="text/css">
+        .nav-tabs>li>a {
+            border: 1px solid #ddd;
+        }
+        .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+            background-color: #ddd;
+        }
+        .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+            background-color: transparent !important;
+        }
+        .cm-abas {
+            position: relative !important;
+            padding: 10px 25px 10px 15px !important;
+        }
+        .close{
+            position: absolute !important;
+            top: 0 !important;
+            right: 0 !important;
+            padding: 2px 5px !important;
+            border-style: none !important;
+            line-height: 2 !important;
+            font-size: 18px !important;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Ohanabr</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li>
+                <a href="javascript:void(0)"
+                   data-menu-refresh="0"
+                   data-menu-id="inicio"
+                   data-menu-title="Inicio"
+                   data-menu-href="https://www.nfoservers.com"
+                   class="tbmenu"
+                >Inicio</a>
+            </li>
+            <li>
+                <a href="javascript:void(0)"
+                   data-menu-refresh="0"
+                   data-menu-id="empresa"
+                   data-menu-title="Empresa"
+                   data-menu-href="http://feniciatapetes.com.br/"
+                   class="tbmenu"
+                >Empresa</a>
+            </li>
+            <li>
+                <a href="javascript:void(0)"
+                   data-menu-refresh="0"
+                   data-menu-id="produtos"
+                   data-menu-title="Produtos"
+                   data-menu-href="http://gisa.ninja"
+                   class="tbmenu"
+                >Produtos</a>
+            </li>
+            <li>
+                <a href="javascript:void(0)"
+                   data-menu-refresh="1"
+                   data-menu-id="contato"
+                   data-menu-title="Contato"
+                   data-menu-href="http://dhospedagem.com/"
+                   class="tbmenu"
+                >Contato</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<ul class="nav nav-tabs" id="menu-buttons">
+
+</ul>
+
+<div class="tab-content" id="menu-contents">
+
+</div>
+
+<script type="text/javascript">
+
+    /*
+    talvez fosse legal trocar isso por um "onclick" no propio botão.
+     */
+    document
+        .querySelectorAll('.tbmenu')
+        .forEach(function (tbm) {
+            tbm.addEventListener('click', function (evt) {
+                var t = evt.target;
+                createTab(
+                    t.getAttribute('data-menu-id'),
+                    Boolean(parseInt(t.getAttribute('data-menu-refresh'))),
+                    t.getAttribute('data-menu-title'),
+                    t.getAttribute('data-menu-href')
+                );
+            });
+        });
+    
+    function buildTabContent(id, title, href) {
+        var d = document.createElement('div');
+        d.setAttribute('data-menu-id', id);
+        d.classList.add('tab-pane');
+        d.innerHTML = '<h3>'+title+'</h3><iframe src="'+href+'" frameborder="0"></iframe>';
+        return d;
+    }
+
+    function createTab(id, refresh, title, href) {
+        var q = document.querySelector('.aba[data-menu-id="'+id+'"]');
+        /*
+        button
+        */
+        if(q === null) {
+            refresh = false;
+            var qn = document.querySelector('#menu-buttons');
+            var li = document.createElement('li');
+            li.classList.add('aba');
+            li.setAttribute('data-menu-id', id);
+            li.innerHTML = '<a href="#" onclick="showTab(\''+id+'\')" class="cm-abas">'+title+'<a href="javascript:void(0)" onclick="removeTab(\''+id+'\')" class="close close-menu">&times;</a></a>';
+            qn.appendChild(li);
+        }
+        /*
+        content
+        */
+        var contents = document.querySelector('#menu-contents');
+        var cq = contents.querySelector('[data-menu-id="'+id+'"]');
+        if(cq === null) {
+            var tc = buildTabContent(id, title, href)
+            contents.appendChild(tc);
+        }
+        showTab(id, refresh);
+    }
+
+    function showTab(id, refresh) {
+
+        var r = refresh || false;
+        var tabs = document.querySelector('.tab-content');
+        var ntabs = document.querySelector('.nav.nav-tabs');
+        var ct = tabs.querySelector('.tab-pane.active');
+
+        /**
+         * button
+         */
+        var cb = ntabs.getElementsByClassName('active');
+
+        if(cb.length) {
+            for(i = 0; i < cb.length; i++) {
+                cb[i].classList.remove('active');
+            }
+        }
+
+        ntabs.querySelector('[data-menu-id="'+id+'"]').classList.add('active');
+
+        /**
+         * content
+         */
+        if(ct) {
+            ct.classList.remove('active');
+        }
+
+        tabs.querySelector('[data-menu-id="'+id+'"]').classList.add('active');
+
+        if(r) {
+            var tab = tabs.querySelector('[data-menu-id="'+id+'"]');
+            var iframes = tab.getElementsByTagName('iframe');
+            for(w = 0; w < iframes.length; w++) {
+                iframes[w].src = iframes[w].src;
+            }
+        }
+
+    }
+
+    function removeTab(id) {
+
+        var buttons = document.querySelector('#menu-buttons');
+        var contents = document.querySelector('#menu-contents');
+
+        var _b = buttons.querySelector('li[data-menu-id="'+id+'"]');
+        var _c = contents.querySelector('div[data-menu-id="'+id+'"]');
+
+        var wasCurrent = _b.classList.contains('active');
+
+        if(_b) {
+            _b.remove();
+        }
+
+        if(_c) {
+            _c.remove();
+        }
+
+        var ql = contents.querySelectorAll('[data-menu-id]');
+
+        if(wasCurrent && ql.length) {
+            showTab(ql[ql.length - 1].getAttribute('data-menu-id'));
+        }
+    }
+</script>
+
+</body>
+</html>
