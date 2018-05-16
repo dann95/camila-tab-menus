@@ -46,7 +46,7 @@
                    data-menu-id="inicio"
                    data-menu-title="Inicio"
                    data-menu-href="https://www.nfoservers.com"
-                   class="tbmenu"
+                   onclick="createTab(this)"
                 >Inicio</a>
             </li>
             <li>
@@ -55,7 +55,7 @@
                    data-menu-id="empresa"
                    data-menu-title="Empresa"
                    data-menu-href="http://feniciatapetes.com.br/"
-                   class="tbmenu"
+                   onclick="createTab(this)"
                 >Empresa</a>
             </li>
             <li>
@@ -64,7 +64,7 @@
                    data-menu-id="produtos"
                    data-menu-title="Produtos"
                    data-menu-href="http://gisa.ninja"
-                   class="tbmenu"
+                   onclick="createTab(this)"
                 >Produtos</a>
             </li>
             <li>
@@ -73,7 +73,7 @@
                    data-menu-id="contato"
                    data-menu-title="Contato"
                    data-menu-href="http://dhospedagem.com/"
-                   class="tbmenu"
+                   onclick="createTab(this)"
                 >Contato</a>
             </li>
         </ul>
@@ -90,23 +90,6 @@
 
 <script type="text/javascript">
 
-    /*
-    talvez fosse legal trocar isso por um "onclick" no propio botão.
-     */
-    document
-        .querySelectorAll('.tbmenu')
-        .forEach(function (tbm) {
-            tbm.addEventListener('click', function (evt) {
-                var t = evt.target;
-                createTab(
-                    t.getAttribute('data-menu-id'),
-                    Boolean(parseInt(t.getAttribute('data-menu-refresh'))),
-                    t.getAttribute('data-menu-title'),
-                    t.getAttribute('data-menu-href')
-                );
-            });
-        });
-    
     function buildTabContent(id, title, href) {
         var d = document.createElement('div');
         d.setAttribute('data-menu-id', id);
@@ -115,7 +98,13 @@
         return d;
     }
 
-    function createTab(id, refresh, title, href) {
+    function createTab(el) {
+
+        var id = el.getAttribute('data-menu-id');
+        var refresh = Boolean(parseInt(el.getAttribute('data-menu-refresh')));
+        var title = el.getAttribute('data-menu-title');
+        var href = el.getAttribute('data-menu-href');
+
         var q = document.querySelector('.aba[data-menu-id="'+id+'"]');
         /*
         button
