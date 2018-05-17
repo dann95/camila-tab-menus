@@ -90,6 +90,12 @@
 
 <script type="text/javascript">
 
+    var _MAX_TABS_ = 2;
+
+    function notifyMaxTabsOpen(amount) {
+        alert("Você só pode abrir "+_MAX_TABS_+", já existem "+amount+" Abas abertas, por favor feche uma.");
+    }
+
     function buildTabContent(id, title, href) {
         var d = document.createElement('div');
         d.setAttribute('data-menu-id', id);
@@ -105,10 +111,16 @@
         var title = el.getAttribute('data-menu-title');
         var href = el.getAttribute('data-menu-href');
 
-        var q = document.querySelector('.aba[data-menu-id="'+id+'"]');
+        var amountOpen = document.querySelectorAll('.aba[data-menu-id]').length;
+        if(_MAX_TABS_ > 0 && amountOpen >= _MAX_TABS_) {
+            notifyMaxTabsOpen(amountOpen);
+            return;
+        }
+
         /*
         button
         */
+        var q = document.querySelector('.aba[data-menu-id="'+id+'"]');
         if(q === null) {
             refresh = false;
             var qn = document.querySelector('#menu-buttons');
